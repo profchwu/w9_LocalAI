@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 上架完全教學（新手從安裝到跑通）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+    background: #f6f8fa;
+    color: #24292e;
+    line-height: 1.7;
+    padding-bottom: 40px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  header {
+    background: linear-gradient(135deg, #0969da 0%, #0550ae 100%);
+    color: #fff;
+    padding: 48px 24px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(9, 105, 218, 0.25);
+  }
+  header h1 { font-size: 2rem; margin-bottom: 12px; font-weight: 700; }
+  header p { font-size: 1.05rem; opacity: 0.95; max-width: 650px; margin: 0 auto; }
+  .badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 14px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    font-size: 0.85rem;
+  }
+  nav {
+    background: #fff;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  nav h2 { font-size: 1rem; margin-bottom: 10px; color: #0969da; }
+  nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  nav li { margin: 0; }
+  nav a {
+    text-decoration: none;
+    color: #57606a;
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  nav a:hover { background: #f1f8ff; color: #0969da; }
+  section {
+    background: #fff;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    padding: 30px 26px;
+    margin-bottom: 26px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    color: #0969da;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2 .step-num {
+    background: #0969da; color: #fff; width: 28px; height: 28px;
+    border-radius: 50%; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 0.85rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  p { margin-bottom: 14px; }
+  .lead { font-size: 1.05rem; color: #57606a; margin-bottom: 20px; }
+  ul, ol { margin-left: 22px; margin-bottom: 16px; }
+  li { margin-bottom: 7px; }
+  strong { color: #1f2937; }
+  code {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+    color: #d73a49;
+  }
+  pre {
+    background: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 14px 0;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  pre code { background: transparent; border: none; padding: 0; color: inherit; font-size: inherit; }
+  .cmd {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+  }
+  .cmd .prompt { color: #0969da; font-weight: 700; white-space: nowrap; user-select: none; }
+  .cmd code { flex: 1; background: #fff; border: 1px solid #d0d7de; }
+  .btn-copy {
+    background: #fff; border: 1px solid #d0d7de; border-radius: 6px;
+    padding: 4px 10px; font-size: 0.8rem; cursor: pointer; color: #57606a;
+  }
+  .btn-copy:hover { background: #f3f4f6; color: #0969da; }
+  .tip {
+    background: #fffbeb;
+    border-left: 4px solid #d29922;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+    font-size: 0.95rem;
+  }
+  .tip strong { color: #926000; }
+  .warning {
+    background: #ffebe6;
+    border-left: 4px solid #cf222e;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+    font-size: 0.95rem;
+  }
+  .warning strong { color: #a40e26; }
+  .success {
+    background: #dff6dd;
+    border-left: 4px solid #1a7e44;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+    font-size: 0.95rem;
+  }
+  .success strong { color: #14532d; }
+  .step-box {
+    background: #f1f8ff;
+    border: 1px solid #bcdfff;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .step-box strong { color: #0550ae; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  th, td { border: 1px solid #d0d7de; padding: 8px 12px; text-align: left; }
+  th { background: #f6f8fa; color: #0969da; }
+  .fig {
+    text-align: center;
+    margin: 20px 0;
+    color: #57606a;
+    font-size: 0.85rem;
+  }
+  .fig svg { max-width: 100%; height: auto; border: 1px solid #d0d7de; border-radius: 8px; background: #fff; }
+  .checklist { list-style: none; margin-left: 0; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .checklist .chk {
+    width: 20px; height: 20px; border: 2px solid #0969da; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #0969da; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 16px 0; }
+  .card {
+    border: 1px solid #d0d7de; border-radius: 10px; padding: 18px; background: #fff;
+  }
+  .card h3 { margin-bottom: 8px; color: #0969da; font-size: 1.05rem; }
+  .card p { font-size: 0.9rem; color: #57606a; margin-bottom: 0; }
+  footer {
+    text-align: center; padding: 30px 20px; color: #57606a; font-size: 0.9rem;
+    border-top: 1px solid #d0d7de; margin-top: 20px;
+  }
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    header { padding: 32px 18px; }
+    header h1 { font-size: 1.5rem; }
+    section { padding: 20px 18px; }
+    nav ul { flex-direction: column; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="#fff" style="margin-bottom:14px; display:inline-block;">
+    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C-4.42 18.07-3.92 17.6-3.92 17.6-.17 17.6 2.3 18.4 2.3 18.4 3.65 18.85 4.5 19.55 4.5 19.55 5.32 21.05 6.68 20.35 7.25 20.05 7.55 21.1 8.45 20.8 9 21.8 9.4 21.4 10 21.8 11.2 21.8 12 .297zM12 11c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0 3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm7-3.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+  </svg>
+  <h1>GitHub 上架完全教學</h1>
+  <p>新手從安裝 Git、建立帳號，一路做到程式碼上傳並啟用 GitHub Pages，離線也能閱讀。</p>
+  <span class="badge">🖥️ Windows / macOS / Linux 通用</span>
+  <span class="badge">🖼️ 全部圖片內嵌，無外部網路</span>
+</header>
+
+<nav>
+  <h2>📖 本教學目錄</h2>
+  <ul>
+    <li><a href="#prepare">準備工作</a></li>
+    <li><a href="#step1">步驟 1：安裝 Git</a></li>
+    <li><a href="#step2">步驟 2：建立 GitHub 帳號</a></li>
+    <li><a href="#step3">步驟 3：設定 Git 身分</a></li>
+    <li><a href="#step4">步驟 4：建立本地專案</a></li>
+    <li><a href="#step5">步驟 5：在 GitHub 建立遠端 Repository</a></li>
+    <li><a href="#step6">步驟 6：將程式碼推上 GitHub</a></li>
+    <li><a href="#step7">步驟 7：啟用 GitHub Pages 上架</a></li>
+    <li><a href="#troubleshoot">常見問題與除錯</a></li>
+  </ul>
+</nav>
+
+<section id="prepare">
+  <h2><span class="step-num">0</span> 準備工作</h2>
+  <p>跟著本教學，你只需要一台電腦與網路連線（用來下載 Git 與註冊 GitHub）。全部操作都在「終端機 / 命令列」完成，不需要安裝額外的桌面軟體。</p>
+  <div class="grid">
+    <div class="card">
+      <h3>🪟 Windows</h3>
+      <p>安裝 Git for Windows，隨附 Git Bash 終端機。</p>
+    </div>
+    <div class="card">
+      <h3>🍎 macOS</h3>
+      <p>透過 Homebrew 安裝，或使用 Xcode Command Line Tools。</p>
+    </div>
+    <div class="card">
+      <h3>🐧 Linux</h3>
+      <p>使用套件管理器（apt / yum / dnf）安裝 git。</p>
+    </div>
+  </div>
+  <div class="tip"><strong>💡 提示：</strong> 如果你從來沒用過終端機，不用擔心，本教學會把每一個指令都列出來，複製貼上就能執行。</div>
+</section>
+
+<section id="step1">
+  <h2><span class="step-num">1</span> 步驟 1：安裝 Git</h2>
+  <p>Git 是版本控制工具，讓你紀錄程式碼變更，並能上傳到 GitHub。</p>
+
+  <h3>Windows 安裝方式</h3>
+  <ol>
+    <li>前往 <a href="https://git-scm.com/" target="_blank" rel="noopener">git-scm.com</a> 下載 Git for Windows。</li>
+    <li>執行安裝程式，大部分選項保持預設即可。</li>
+    <li>安裝完成後，在開始選單找到「Git Bash」並開啟。</li>
+  </ol>
+
+  <h3>macOS 安裝方式</h3>
+  <div class="cmd"><span class="prompt">$</span><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="cmd"><span class="prompt">$</span><code>brew install git</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <p>若你沒有 Homebrew，也可直接在終端機輸入 <code>git</code>，系統會提示安裝 Xcode Command Line Tools。</p>
+
+  <h3>驗證是否安裝成功</h3>
+  <div class="cmd"><span class="prompt">$</span><code>git --version</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <p>若看到類似 <code>git version 2.45.0</code> 的訊息，即表示安裝成功。</p>
+  <div class="fig"><svg width="560" height="220" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="220" fill="#ffffff" rx="8"/><rect x="20" y="20" width="120" height="32" rx="4" fill="#f6f8fa"/><text x="30" y="40" font-size="14" fill="#57606a" font-family="sans-serif">terminal</text><rect x="160" y="20" width="300" height="32" rx="4" fill="#0d1117"/><text x="170" y="40" font-size="13" fill="#c9d1d9" font-family="monospace">git --version</text><rect x="20" y="70" width="520" height="40" rx="4" fill="#f3f4f6"/><text x="30" y="95" font-size="14" fill="#d73a49" font-family="monospace">git version 2.45.0</text><rect x="20" y="135" width="520" height="40" rx="4" fill="#dff6dd"/><text x="30" y="160" font-size="14" fill="#14532d" font-family="sans-serif">✅ 安裝成功，可進行下一步</text></svg><div class="fig">終端機驗證 Git 版本範例</div></div>
+</section>
+
+<section id="step2">
+  <h2><span class="step-num">2</span> 步驟 2：建立 GitHub 帳號</h2>
+  <ol>
+    <li>開啟瀏覽器，前往 <a href="https://github.com" target="_blank" rel="noopener">github.com</a>。</li>
+    <li>點擊右上角「Sign up」註冊。</li>
+    <li>輸入電子郵件、設定密碼、建立使用者名稱（Username）。</li>
+    <li>完成圖形驗證與電子郵件驗證。</li>
+  </ol>
+  <div class="warning"><strong>⚠️ 重要：</strong> 註冊時設定的使用者名稱會出現在你的網站網址中（例如 <code>username.github.io</code>），建議選擇簡單好記的英文名稱。</div>
+  <div class="fig"><svg width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="300" fill="#ffffff" rx="8"/><rect x="20" y="20" width="520" height="40" rx="4" fill="#24292e"/><text x="30" y="44" font-size="15" fill="#ffffff" font-family="sans-serif">GitHub</text><rect x="450" y="24" width="90" height="32" rx="4" fill="#238636"/><text x="470" y="44" font-size="13" fill="#ffffff" font-family="sans-serif">Sign up</text><rect x="20" y="90" width="520" height="160" rx="6" fill="#f6f8fa"/><text x="30" y="115" font-size="13" fill="#57606a" font-family="sans-serif">Email address</text><rect x="30" y="125" width="180" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="30" y="190" font-size="13" fill="#57606a" font-family="sans-serif">Create password</text><rect x="220" y="125" width="310" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="30" y="255" font-size="13" fill="#57606a" font-family="sans-serif">Username</text><rect x="30" y="200" width="180" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><rect x="30" y="265" width="160" height="24" rx="4" fill="#0969da"/><text x="90" y="284" font-size="12" fill="#ffffff" font-family="sans-serif">Create account</text></svg><div class="fig">GitHub 註冊頁面簡化示意圖</div></div>
+</section>
+
+<section id="step3">
+  <h2><span class="step-num">3</span> 步驟 3：設定 Git 身分</h2>
+  <p>在上傳程式碼前，請告訴 Git 誰是提交者，這會出現在每一次的紀錄中。</p>
+  <div class="cmd"><span class="prompt">$</span><code>git config --global user.name "你的名字"</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="cmd"><span class="prompt">$</span><code>git config --global user.email "你的 email"</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <p>請將 <code>你的名字</code> 與 <code>你的 email</code> 替換成你在 GitHub 註冊時使用的資訊。</p>
+  <div class="cmd"><span class="prompt">$</span><code>git config --global --list</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <p>用來確認設定已生效。</p>
+  <div class="tip"><strong>💡 提示：</strong> 如果你不想每次推程式碼都輸入密碼，可設定 SSH 金鑰（進階選項，本教學以 HTTPS 方式示範即可跑通）。</div>
+</section>
+
+<section id="step4">
+  <h2><span class="step-num">4</span> 步驟 4：建立本地專案</h2>
+  <p>先在電腦上建立一個簡單網站資料夾，並初始化 Git 儲存庫。</p>
+  <div class="cmd"><span class="prompt">$</span><code>mkdir my-website</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="cmd"><span class="prompt">$</span><code>cd my-website</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="cmd"><span class="prompt">$</span><code>git init</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <h3>建立網頁檔案</h3>
+  <p>在 <code>my-website</code> 資料夾中建立 <code>index.html</code>，內容如下：</p>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-TW"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;我的第一個 GitHub 網站&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;你好，GitHub！&lt;/h1&gt;
+  &lt;p&gt;這是我第一次透過 GitHub Pages 上架的網頁。&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <div class="success"><strong>✅ 完成：</strong> 你現在有一個本地 Git 專案，裡面有一個網頁檔案。</div>
+</section>
+
+<section id="step5">
+  <h2><span class="step-num">5</span> 步驟 5：在 GitHub 建立遠端 Repository</h2>
+  <ol>
+    <li>登入 GitHub，點擊右上角你的大頭照 → 「Your repositories」。</li>
+    <li>點擊綠色「New」按鈕建立新 repository。</li>
+    <li>Repository name 輸入 <code>my-website</code>（或你喜歡的名稱）。</li>
+    <li>選擇「Public」。（免費帳號也可選 Private，但 Pages 建議用 Public。）</li>
+    <li><strong>不要勾選</strong>「Add a README file」，以免與本地檔案衝突。</li>
+    <li>點擊「Create repository」。</li>
+  </ol>
+  <p>建立完成後，GitHub 會顯示一個網址，類似：</p>
+  <div class="cmd"><span class="prompt">$</span><code>https://github.com/你的使用者名稱/my-website.git</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="fig"><svg width="560" height="360" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="360" fill="#ffffff" rx="8"/><rect x="20" y="20" width="520" height="44" rx="4" fill="#24292e"/><text x="30" y="48" font-size="15" fill="#ffffff" font-family="sans-serif">Your repositories</text><rect x="440" y="26" width="100" height="34" rx="4" fill="#238636"/><text x="462" y="48" font-size="13" fill="#ffffff" font-family="sans-serif">New</text><rect x="20" y="90" width="520" height="230" rx="6" fill="#f6f8fa"/><text x="30" y="120" font-size="13" fill="#57606a" font-family="sans-serif">Repository name</text><rect x="30" y="132" width="260" height="34" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="40" y="156" font-size="13" fill="#57606a" font-family="sans-serif">my-website</text><text x="30" y="180" font-size="13" fill="#57606a" font-family="sans-serif">Public / Private</text><rect x="30" y="192" width="120" height="32" rx="4" fill="#238636"/><text x="68" y="216" font-size="12" fill="#ffffff" font-family="sans-serif">Public</text><text x="30" y="240" font-size="13" fill="#57606a" font-family="sans-serif">Initialize this repository with:</text><rect x="30" y="252" width="20" height="20" rx="3" fill="#ffffff" stroke="#d0d7de"/><text x="60" y="270" font-size="13" fill="#57606a" font-family="sans-serif">Add a README file</text><rect x="30" y="295" width="180" height="34" rx="4" fill="#0969da"/><text x="92" y="318" font-size="13" fill="#ffffff" font-family="sans-serif">Create repository</text></svg><div class="fig">GitHub 建立新 Repository 頁面示意圖</div></div>
+</section>
+
+<section id="step6">
+  <h2><span class="step-num">6</span> 步驟 6：將程式碼推上 GitHub</h2>
+  <p>在終端機中，回到 <code>my-website</code> 資料夾，依序執行以下指令：</p>
+  <div class="step-box"><strong>🔗 連結本地與遠端：</strong><br>
+  將 <code>你的使用者名稱</code> 替換成你的 GitHub 帳號名。</div>
+  <div class="cmd"><span class="prompt">$</span><code>git remote add origin https://github.com/你的使用者名稱/my-website.git</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="step-box"><strong>📦 加入檔案並提交：</strong></div>
+  <div class="cmd"><span class="prompt">$</span><code>git add .</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="cmd"><span class="prompt">$</span><code>git commit -m "初始提交：加入 index.html"</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="step-box"><strong>🌿 設定主分支為 main：</strong></div>
+  <div class="cmd"><span class="prompt">$</span><code>git branch -M main</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <div class="step-box"><strong>🚀 推送到 GitHub：</strong></div>
+  <div class="cmd"><span class="prompt">$</span><code>git push -u origin main</code><button class="btn-copy" onclick="copyCode(this)">複製</button></div>
+  <p>若系統彈出視窗要求輸入 GitHub 帳號與密碼，請輸入註冊時的資訊。（部分環境會要求使用 Personal Access Token，而非直接密碼。）</p>
+  <div class="success"><strong>✅ 完成：</strong> 刷新 GitHub Repository 頁面，你應該能看到 <code>index.html</code> 已經上傳。</div>
+  <div class="fig"><svg width="560" height="260" viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="260" fill="#ffffff" rx="8"/><text x="40" y="60" font-size="14" fill="#57606a" font-family="sans-serif">本地電腦</text><rect x="30" y="80" width="160" height="120" rx="6" fill="#f1f8ff" stroke="#0969da"/><text x="45" y="100" font-size="13" fill="#0550ae" font-family="sans-serif">index.html</text><text x="45" y="125" font-size="13" fill="#0550ae" font-family="sans-serif">.git/</text><path d="M190 130 L230 130 L260 100 L290 130 L330 130" fill="none" stroke="#d0d7de" stroke-width="2"/><text x="230" y="145" font-size="12" fill="#57606a" font-family="sans-serif">git push</text><text x="40" y="200" font-size="14" fill="#57606a" font-family="sans-serif">GitHub 雲端</text><rect x="340" y="80" width="190" height="120" rx="6" fill="#f6f8fa" stroke="#d0d7de"/><text x="355" y="100" font-size="13" fill="#24292e" font-family="sans-serif">my-website</text><text x="355" y="125" font-size="13" fill="#57606a" font-family="sans-serif">index.html ✅</text></svg><div class="fig">從本地推送程式碼到 GitHub 流程示意圖</div></div>
+</section>
+
+<section id="step7">
+  <h2><span class="step-num">7</span> 步驟 7：啟用 GitHub Pages 上架</h2>
+  <p>GitHub Pages 可免費將你的 Repository 當成網站託管，產出類似 <code>https://你的使用者名稱.github.io/my-website/</code> 的網址。</p>
+  <ol>
+    <li>進入你的 Repository 頁面，點選上方選單的 <strong>Settings</strong>。</li>
+    <li>在左側邊欄點選 <strong>Pages</strong>。</li>
+    <li>在「Build and deployment」區塊，Branch 選擇 <strong>main</strong>，Folder 選擇 <strong>(root)</strong>。</li>
+    <li>點擊 <strong>Save</strong>。</li>
+    <li>等候 1~2 分鐘，頁面會顯示綠色網址，點擊即可開啟你的網站。</li>
+  </ol>
+  <div class="success"><strong>🎉 上架成功！</strong> 你現在可以將網址分享給任何人瀏覽。</div>
+  <div class="fig"><svg width="560" height="340" viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="340" fill="#ffffff" rx="8"/><rect x="20" y="20" width="520" height="44" rx="4" fill="#24292e"/><text x="30" y="48" font-size="15" fill="#ffffff" font-family="sans-serif">Settings → Pages</text><rect x="20" y="85" width="520" height="230" rx="6" fill="#f6f8fa"/><text x="30" y="115" font-size="13" fill="#57606a" font-family="sans-serif">Build and deployment</text><rect x="30" y="128" width="120" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="40" y="150" font-size="12" fill="#57606a" font-family="sans-serif">Branch</text><rect x="160" y="128" width="140" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="170" y="150" font-size="12" fill="#57606a" font-family="sans-serif">main</text><text x="30" y="180" font-size="13" fill="#57606a" font-family="sans-serif">Folder</text><rect x="30" y="192" width="140" height="30" rx="4" fill="#ffffff" stroke="#d0d7de"/><text x="40" y="215" font-size="12" fill="#57606a" font-family="sans-serif">/(root)</text><rect x="30" y="235" width="160" height="34" rx="4" fill="#0969da"/><text x="88" y="258" font-size="12" fill="#ffffff" font-family="sans-serif">Save</text><rect x="30" y="285" width="500" height="32" rx="4" fill="#dff6dd"/><text x="40" y="307" font-size="12" fill="#14532d" font-family="sans-serif">✅ 網站已發布：https://username.github.io/my-website/</text></svg><div class="fig">GitHub Pages 啟用設定示意圖</div></div>
+</section>
+
+<section id="troubleshoot">
+  <h2><span class="step-num">8</span> 常見問題與除錯</h2>
+  <table>
+    <tr><th>問題</th><th>可能原因</th><th>解決方式</th></tr>
+    <tr><td><code>git</code> 不是內部或外部命令</td><td>Git 未安裝或未加入 PATH</td><td>重新安裝 Git，或重新開啟終端機</td></tr>
+    <tr><td>推送時要求輸入帳號密碼失敗</td><td>GitHub 已停用帳號密碼驗證</td><td>改用 Personal Access Token 或設定 SSH 金鑰</td></tr>
+    <tr><td>Pages 網址顯示 404</td><td>尚未完成部署，或分支設定錯誤</td><td>在 Settings → Pages 確認分支為 main，等候幾分鐘</td></tr>
+    <tr><td>repository 名稱與本地資料夾不同</td><td>遠端網址輸入錯誤</td><td>執行 <code>git remote set-url origin ...</code> 修正</td></tr>
+  </table>
+  <div class="tip"><strong>💡 提示：</strong> 如果你之後修改了 <code>index.html</code>，只需執行 <code>git add .</code>、<code>git commit -m "更新內容"</code>、<code>git push</code>，網站會自動更新。</div>
+</section>
+
+<section>
+  <h2>✅ 檢查清單</h2>
+  <ul class="checklist">
+    <li><span class="chk">✔</span> Git 已安裝且 <code>git --version</code> 可顯示版本</li>
+    <li><span class="chk">✔</span> 已建立 GitHub 帳號並驗證電子郵件</li>
+    <li><span class="chk">✔</span> 已執行 <code>git config</code> 設定姓名與 Email</li>
+    <li><span class="chk">✔</span> 本地資料夾已 <code>git init</code> 並加入 <code>index.html</code></li>
+    <li><span class="chk">✔</span> GitHub Repository 已建立且未初始化 README</li>
+    <li><span class="chk">✔</span> 已執行 <code>git push -u origin main</code> 上傳程式碼</li>
+    <li><span class="chk">✔</span> GitHub Pages 已啟用，網站網址可正常開啟</li>
+  </ul>
+</section>
+
+<footer>
+  <p>📘 GitHub 上架完全教學 · 單一 HTML 檔，全部圖片內嵌，離線也能閱讀</p>
+  <p>若覺得有幫助，歡迎將此檔案分享給剛開始學習 Git 與 GitHub 的朋友。</p>
+</footer>
+
+</div>
+
+<script>
+  function copyCode(btn) {
+    const code = btn.previousElementSibling;
+    const text = code.textContent || code.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = "✅ 已複製";
+      btn.style.background = "#dff6dd";
+      btn.style.color = "#14532d";
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = "#fff";
+        btn.style.color = "#57606a";
+      }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>
